@@ -1,0 +1,121 @@
+USE Artur_Khomenko_Modul2
+
+GO
+--if exists drop
+DROP TABLE IF EXISTS Child 
+DROP TABLE IF EXISTS Parent 
+
+CREATE TABLE Parent 
+	(
+		Parent_Id INT NOT NULL,
+		First_Name VARCHAR(25) NOT NULL,
+		Last_Name VARCHAR(25) NOT NULL,
+		Phone_Number VARCHAR(15) ,
+		Email VARCHAR (55),
+		Address VARCHAR(55),
+		City VARCHAR(55),
+		Child_Id INT,
+		Inserted_Date DATETIME,
+		Updated_Date DATETIME
+		CONSTRAINT Parent_PK PRIMARY KEY CLUSTERED (Parent_Id),
+		CONSTRAINT Parent_UK UNIQUE (Email),
+		CONSTRAINT Parent_FK FOREIGN KEY(Child_Id) REFERENCES Child (Child_Id)
+		ON DELETE CASCADE
+		ON UPDATE CASCADE
+
+	)
+	ON Artur_Khomenko_Modul2_FG1;
+GO
+
+CREATE TABLE Child
+	(
+		Child_Id INT PRIMARY KEY ,
+		First_Name VARCHAR(15) NOT NULL,
+		Last_Name VARCHAR(15) NOT NULL,
+		Born DATE,
+		Address VARCHAR(50),
+		School_Number INT ,
+		Class_Number INT DEFAULT (0),
+		AVG_Estimate int NOT NULL CHECK(AVG_Estimate > 0 and AVG_Estimate < 11 ) ,
+		Inserted_Date DATETIME,
+		Updated_Date DATETIME
+		
+	)
+	ON Artur_Khomenko_Modul2_FG1;
+GO
+------ insert duplicate primary key 
+INSERT INTO Parent  (Parent_Id, First_Name, Last_Name, Phone_Number, Email, Address, City, Child_Id, Inserted_date)
+	VALUES(1,'Yuriy','Kulish','0932450909','Yuriy2015@gmail.com','Vitovskogo 4a','Lviv',1,GETDATE())
+
+GO
+------insert duplicate unique key (email)
+INSERT INTO Parent  (Parent_Id, First_Name, Last_Name, Phone_Number, Email, Address, City, Child_Id, Inserted_date)
+	VALUES(4,'Yuriy','Kulish','0932450909','artur2015@gmail.com','Vitovskogo 4a','Lviv',4,GETDATE())
+
+GO
+---------Update Cascade
+Update Child
+SET Born = '2011-03-17' WHERE Child_Id = 4
+
+Update Parent
+SET Inserted_Date = GETDATE() WHERE Parent_Id = 3
+---------Delete Cascade
+Delete From Child
+WHERE Child_Id = 3
+
+
+GO
+	SELECT * FROM Parent
+	SELECT * FROM Child
+
+GO
+-----Insert with CONSTRAINT Class_Number DEFAULT (0)  
+INSERT INTO Child(Child_Id,First_Name,Last_Name,Address,School_Number,AVG_Estimate,Inserted_date)
+VALUES(	11,'Olena','Kryva','Stepana Bandery 8',4,10,GETDATE())
+
+GO
+
+------Insert with Constraint CHECK(AVG_Estimate > 0 and AVG_Estimate < 11 ) 
+INSERT INTO Child(Child_Id,First_Name,Last_Name,Address,School_Number,AVG_Estimate,Inserted_date)
+VALUES(	5,'Olena','Kryva','Stepana Bandery 8',4,11,GETDATE())
+
+GO
+	SELECT * FROM Parent
+	SELECT * FROM Child
+
+GO
+
+
+
+
+
+-------- insert into Parent
+	INSERT INTO Parent  (Parent_Id, First_Name, Last_Name, Phone_Number, Email, Address, City, Child_Id, Inserted_date)
+	VALUES(1,'Artur','Khomenko','0981120837','artur2015@gmail.com','Stryiska 44a','Lviv',1,GETDATE())
+	
+	INSERT INTO Parent (Parent_Id,First_Name,Last_Name,Phone_Number,Email,Address,City,Child_Id,Inserted_date)
+	VALUES(2,'Andriy','Krapivkin','0962430920','andriy.2017@gmail.com','Morozna 14','Lviv',2,GETDATE())
+	
+	INSERT INTO Parent (Parent_Id,First_Name,Last_Name,Phone_Number,Email,Address,City,Child_Id)
+	VALUES(3,'Lesyk','Dep','0962420922','lesyk.2017@gmail.com','Angarna 14','Lviv',3)
+
+GO
+
+----------insert into Child
+INSERT INTO Child(Child_Id,First_Name,Last_Name,Address,School_Number,Class_Number,AVG_Estimate,Inserted_date)
+VALUES(	1,'Artem','Khomenko','Stryiska 28',4,1,10,GETDATE())
+	
+INSERT INTO Child (Child_Id,First_Name,Last_Name,Address,School_Number,Class_Number,AVG_Estimate,Inserted_date)
+VALUES(2,'Oleksa','Krapivkina','Morozna 14',4,1,8,GETDATE())
+
+INSERT INTO Child (Child_Id,First_Name,Last_Name,Address,School_Number,Class_Number,AVG_Estimate,Inserted_date)
+VALUES(3,'Oksana','Dep','Angarna 14',4,1,8,GETDATE())
+
+INSERT INTO Child (Child_Id,First_Name,Last_Name,Address,School_Number,Class_Number,AVG_Estimate,Inserted_date)
+VALUES(4,'Anna','Gordienko','Kyivska',4,1,7,GETDATE())
+
+GO
+	SELECT * FROM Parent
+	SELECT * FROM Child
+
+GO
