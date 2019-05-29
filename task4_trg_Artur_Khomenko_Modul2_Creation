@@ -1,0 +1,158 @@
+Use Artur_Khomenko_Modul2;
+go
+--trigger creation
+CREATE Trigger trg_Empl_I_U_D ON Employee
+AFTER Insert, Update, Delete
+
+AS
+
+BEGIN
+
+IF @@ROWCOUNT = 0 RETURN
+DECLARE @operation varchar(10)
+DECLARE @ins int = (Select count(*) FROM inserted)
+DECLARE @del int = (Select count(*) FROM deleted)
+SET @operation = 
+	CASE
+		WHEN @ins > 0 and @del > 0 THEN 'Update'
+		WHEN @ins = 0 and @del > 0 THEN 'Delete'
+		WHEN @ins > 0 and @del = 0 THEN 'Insert'
+
+END
+
+IF @operation = 'Insert'
+BEGIN
+	Insert into Employee_Log (
+		Emp_id,
+		First_name,
+		Last_name,
+		Phone_number,
+		Email,
+		Born_date,
+		Salary,
+		marital_status,
+		hired_to_work,
+		Department,
+		English_level,
+		Job,
+		City,
+		Address,
+		Country,
+		type_of_operation,
+		date_of_operation
+		
+)
+SELECT 	i.Emp_id,
+		i.First_name,
+		i.Last_name,
+		i.Phone_number,
+		i.Email,
+		i.Born_date,
+		i.Salary,
+		i.marital_status,
+		i.hired_to_work,
+		i.Department,
+		i.English_level,
+		i.Job,
+		i.City,
+		i.Address,
+		i.Country,
+		@operation,
+		GETDATE() 
+		
+FROM Employee as e join inserted as i
+	ON e.Emp_id = i.Emp_id
+END
+
+IF @operation = 'Delete'
+BEGIN 
+	Insert into Employee_Log (
+		Emp_id,
+		First_name,
+		Last_name,
+		Phone_number,
+		Email,
+		Born_date,
+		Salary,
+		marital_status,
+		hired_to_work,
+		Department,
+		English_level,
+		Job,
+		City,
+		Address,
+		Country,
+		type_of_operation,
+		date_of_operation
+		
+)
+SELECT 	d.Emp_id,
+		d.First_name,
+		d.Last_name,
+		d.Phone_number,
+		d.Email,
+		d.Born_date,
+		d.Salary,
+		d.marital_status,
+		d.hired_to_work,
+		d.Department,
+		d.English_level,
+		d.Job,
+		d.City,
+		d.Address,
+		d.Country,
+		@operation,
+		GETDATE()
+		
+FROM  deleted as d
+
+END
+
+IF @operation = 'Update'
+BEGIN
+	Insert into Employee_Log (
+		Emp_id,
+		First_name,
+		Last_name,
+		Phone_number,
+		Email,
+		Born_date,
+		Salary,
+		marital_status,
+		hired_to_work,
+		Department,
+		English_level,
+		Job,
+		City,
+		Address,
+		Country,
+		type_of_operation,
+		date_of_operation
+		
+)
+SELECT 	i.Emp_id,
+		i.First_name,
+		i.Last_name,
+		i.Phone_number,
+		i.Email,
+		i.Born_date,
+		i.Salary,
+		i.marital_status,
+		i.hired_to_work,
+		i.Department,
+		i.English_level,
+		i.Job,
+		i.City,
+		i.Address,
+		i.Country,
+		@operation,
+		GETDATE() 
+		
+FROM Employee as e join inserted as i
+	ON e.Emp_id = i.Emp_id
+		join deleted d 
+			ON e.Emp_id = d.Emp_id
+END
+
+
+END
