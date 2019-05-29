@@ -1,0 +1,56 @@
+USE [Artur_Khomenko_Modul2]
+GO
+
+/****** Object:  Trigger [FK].[tr_Parent_I_U_D]    Script Date: 29.05.2019 14:41:40 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE trigger [tr_Parent_I_U_D] ON [Parent]
+AFTER INSERT, UPDATE, DELETE
+
+AS
+
+BEGIN
+
+IF @@ROWCOUNT = 0 RETURN
+DECLARE @operation char(1)
+DECLARE @ins int = (Select count(*) From inserted)
+DECLARE @del int = (Select count(*) From deleted)
+
+SET @operation = 
+	CASE 
+		WHEN @ins > 0 and @del > 0 THEN 'U'
+		WHEN @ins = 0 and @del > 0 THEN 'D'
+		WHEN @ins > 0 and @del = 0 THEn 'I'
+END
+
+IF @operation = 'U'
+	BEGIN
+		Update Parent
+		SET Updated_Date = GETDATE()
+			FROM Parent as p
+			 inner join inserted as i 
+				ON p.Parent_Id =  i.Parent_Id
+		
+		
+	END
+	------if want insert inseerted date auto
+--IF @operation = 'I'
+--	BEGIN
+--		Update Parent
+--		SET Inserted_Date = GETDATE()
+--			FROM Parent as p
+--				inner join inserted as i
+--					ON p.Parent_Id = i.Parent_id
+--	END
+END
+ 		 
+GO
+
+SELECT * FROM Parent
+---check trigger
+Update Parent
+SET Phone_Number = '0981120836' WHERE Parent_id = 1
