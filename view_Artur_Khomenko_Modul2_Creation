@@ -1,0 +1,20 @@
+--drop view if exists
+DROP View IF EXISTS Parent_with_Child
+DROP View IF EXISTS Child_Classnumb_Estimate
+
+--create simple example
+CREATE View Parent_with_Child AS
+	SELECT p.First_Name as Parent_Name,
+			p.Last_Name as Parent_Surname,
+			c.First_Name as Child_Name, 
+			c.Last_Name as Child_Surname
+	FROM Parent as p join Child as c
+	ON p.Child_Id = c.Child_Id
+
+CREATE View Child_Classnumb_Estimate AS
+	SELECT Child_Id, Class_Number Estimate
+		FROM Child
+
+
+SELECT * FROM Parent_with_Child
+SELECT * FROM Child_Classnumb_Estimate
