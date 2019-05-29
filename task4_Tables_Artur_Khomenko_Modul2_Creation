@@ -1,0 +1,67 @@
+--task 4
+
+---drop tables if exists
+DROP Table if EXISTS Employee 
+DROP Table if EXISTS  Employee_Log
+
+--create 
+CREATE Table Employee
+	(
+		Emp_id int,
+		First_name varchar(20),
+		Last_name varchar(20),
+		Phone_number varchar(13),
+		Email varchar(55),
+		Born_date datetime,
+		Salary int,
+		marital_status varchar(15),
+		hired_to_work datetime,
+		Department int,
+		English_level varchar(50),
+		Job varchar(20),
+		City varchar(20),
+		Address varchar(55),
+		Country varchar(20)
+
+	)
+	ON  Artur_Khomenko_Modul2_FG1;
+
+	CREATE Table Employee_Log
+	(
+		Emp_id int,
+		First_name varchar(20),
+		Last_name varchar(20),
+		Phone_number varchar(13),
+		Email varchar(55),
+		Born_date datetime,
+		Salary int,
+		marital_status varchar(15),
+		hired_to_work datetime,
+		Department int,
+		English_level varchar(50),
+		Job varchar(20),
+		City varchar(20),
+		Address varchar(55),
+		Country varchar(20),
+		type_of_operation varchar(10),
+		date_of_operation datetime)
+		ON  Artur_Khomenko_Modul2_FG1;
+	
+	INSERT INTO Employee(Emp_id,First_name,Last_name,Phone_number,Email ,Born_date,Salary,marital_status,hired_to_work,Department,English_level,Job,City,Address,Country)
+	VALUES(1,'Artur','Khomenko','0981120837','Khomenkoartur2015@gmail.com','1993-01-25',2000,'married','2019-05-29',1,'Intermediate' ,'Junior DB','Lviv','Stryiska 28','Ukraine') 
+
+-----check trigger
+	INSERT into Employee(Emp_id, First_name)
+	VALUES(2,'ARTUR')
+
+-----check trigger
+	Delete from Employee
+	WHERE Emp_id = 2
+
+------cher trigger
+	Update Employee
+	SET First_name = 'Andriy' Where Emp_id = 2
+
+
+	SELECT * FROM Employee
+	SELECT * FROM Employee_Log
