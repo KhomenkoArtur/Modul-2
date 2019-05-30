@@ -1,0 +1,17 @@
+CREATE DATABASE Education
+
+CREATE SCHEMA AK;
+
+
+CREATE Synonym AK.Child for Artur_Khomenko_Modul2.dbo.Child;
+CREATE Synonym AK.Parent for Artur_Khomenko_Modul2.dbo.Parent;
+CREATE Synonym AK.Employee for Artur_Khomenko_Modul2.dbo.Employee;
+CREATE Synonym AK.Employee_Log for Artur_Khomenko_Modul2.dbo.Employee_Log;
+
+
+SELECT * FROM sys.tables
+
+SELECT * FROM AK.Child;
+SELECT * FROM AK.Parent;
+SELECT * FROM AK.Employee;
+SELECT * FROM AK.Employee_Log;
